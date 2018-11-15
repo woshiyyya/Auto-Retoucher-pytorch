@@ -1,30 +1,50 @@
 from model import *
 import torch
-import argparse
 from utils.Batcher import BatchGenerator
 from utils.util import *
 from tqdm import tqdm
+from config import set_args
+from utils.logger import create_logger
+from tensorboardX import SummaryWriter
 
 
-if __name__=="__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--name', type=str, default="default")
-    parser.add_argument('--train_path', type=str, default=" ")
-    parser.add_argument('--test_path', type=str, default=" ")
-    parser.add_argument('--submit_dir', type=str, default="submission")
-    parser.add_argument('--batch_size', type=int, default=72)
-    parser.add_argument('--epochs', type=int, default=10)
-    config = parser.parse_args().__dict__
+def predict():
+    raise NotImplementedError
+
+
+if __name__ == "__main__":
+    logger = create_logger(__name__)
+    config = set_args()
+    global_step = 0
+    writer = SummaryWriter(log_dir="figures")
 
     train_data = load_data(config['train_path'])
     test_data = load_data(config['test_path'])
 
     Batcher = BatchGenerator(config, train_data)
     model = BackgroundMatcher()
+    optimizer = torch.optim.Adam(model.parameters(),
+                                 lr=config['lr'],
+                                 betas=(config['b1'], config['b2']),
+                                 eps=config['e'],
+                                 weight_decay=config['decay'])
+    criterion = nn.MSELoss(reduction=False)
 
-    for i in range(config['epochs']):
-        for batch in tqdm(Batcher)
+    for epc in range(config['epochs']):
+        Batcher.reset()
+        for i, batch in tqdm(enumerate(Batcher), total=len(Batcher)):
+            global_step += 1
+            # Just for test
             xb = torch.rand(5, 3, 255, 255)
             xp = torch.rand(5, 3, 255, 255)
             xs = torch.rand(5, 3, 255, 255)
-            model(xb, xp, xs)
+
+            y_pred = model(xb, xp, xs)
+
+            loss = criterion(y_pred, batch['label'])
+            loss.backward()
+
+            optimizer.step()
+            optimizer.zero_grad()
+            if i % 500 == 0:
+                predict()

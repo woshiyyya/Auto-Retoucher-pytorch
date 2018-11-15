@@ -41,5 +41,5 @@ class BackgroundMatcher(nn.Module):
         xp = self.portrait_reader(xp)
         xs = self.scene_reader(xs)
         x = torch.cat([xb, xp, xs], dim=-1)
-
+        x = torch.sigmoid(self.linear(x))
         return x

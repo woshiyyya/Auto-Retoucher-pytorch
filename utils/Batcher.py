@@ -9,6 +9,9 @@ class BatchGenerator(object):
     def clip_tail(self):
         return
 
+    def reset(self):
+        return
+
     def normalize(self):
         return
 
