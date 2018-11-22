@@ -1,20 +1,24 @@
 import argparse
 from os.path import expanduser, join
+import os
 
 
 def set_args():
     parser = argparse.ArgumentParser()
     source_path = join(expanduser("~"), "xyx", "data")
+    data_path = os.path.join(expanduser("~"), "cvdata", "desert")
     # Basic Information
     parser.add_argument('--name', type=str, default="default")
-    parser.add_argument('--train_path', type=str, default=" ")
+    parser.add_argument('--train_path', type=str, default=data_path)
     parser.add_argument('--test_path', type=str, default=" ")
     parser.add_argument('--submit_dir', type=str, default="submission")
 
     # Training Settings
-    parser.add_argument('--batch_size', type=int, default=72)
-    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--batch_size', type=int, default=2)
+    parser.add_argument('--sample_size', type=int, default=4)
+    parser.add_argument('--epochs', type=int, default=3)
     parser.add_argument('--n_eval', type=int, default=512)
+    parser.add_argument('--lambda', type=float, default=1)
     parser.add_argument('--cuda', action='store_true', default=True)
 
     # Optimizer Settings
