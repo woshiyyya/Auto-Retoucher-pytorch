@@ -13,6 +13,10 @@ A PyTorch implementation of ART framework.
 ![resource/result1.png](resource/result1.png)
 
 ### moving sequence:
+Adjustment procedure guided by model's gradient. 
+
+Fg moves from a random initial location to a plausible position
+
 ![resource/result1_seq.png](resource/result1_seq.png)
 
 
