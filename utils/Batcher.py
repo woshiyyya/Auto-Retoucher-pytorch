@@ -7,10 +7,10 @@ import random
 
 
 class BatchGenerator(object):
-    def __init__(self, config, bg_data, fg_data, sp_data, sf_data, is_training=True, ratio=[1, 1, 1]):
+    def __init__(self, config, bg_data, fg_data, sp_data, sf_data, is_training=True, ratio=[14, 6, 2]):
         self.config = config
-        self.sample_size = config['sample_size']
-        self.batch_size = config['sample_size'] * 6
+        self.sample_size = ratio[0]  # config['sample_size']
+        self.batch_size = ratio[0]  # config['sample_size'] * 6
         self.bg_data = bg_data
         self.fg_data = fg_data
         self.sp_data = sp_data
@@ -74,19 +74,23 @@ class BatchGenerator(object):
             pos_y2 = [True for _ in range(self.sample_size)]
 
             # True Backgrounds <--> False Foregrounds [N]
-            neg_col_backgrounds = [self.bg_data[idx] for idx in pos_batch]
-            neg_col_foregrounds = [self.fg_data[idx] for idx in neg_batch]
-            neg_col_sceneparsing = [self.sp_data[idx] for idx in pos_batch]
-            neg_col_y1 = [False for _ in range(self.sample_size)]
-            neg_col_y2 = [False for _ in range(self.sample_size)]
+            neg_col_backgrounds = []
+            neg_col_foregrounds = []
+            neg_col_sceneparsing = []
+            for i in range(self.ratio[1]):
+                neg_col_backgrounds.append(self.bg_data[pos_batch[i]])
+                neg_col_foregrounds.append(self.fg_data[neg_batch[i]])
+                neg_col_sceneparsing.append(self.sp_data[pos_batch[i]])
+            neg_col_y1 = [False for _ in range(self.ratio[1])]
+            neg_col_y2 = [False for _ in range(self.ratio[1])]
 
             # True Backgrounds <--> True Foregrounds & False Position  [4N]
             neg_pos_backgrounds = []
             neg_pos_foregrounds = []
             neg_pos_sceneparsing = []
-            neg_pos_y1 = [True for _ in range(self.sample_size * 4)]
-            neg_pos_y2 = [False for _ in range(self.sample_size * 4)]
-            for i in range(self.sample_size):
+            neg_pos_y1 = [True for _ in range(self.ratio[2] * 4)]
+            neg_pos_y2 = [False for _ in range(self.ratio[2] * 4)]
+            for i in range(self.ratio[2]):
                 idx = pos_batch[i]
                 for k in range(4):
                     neg_pos_backgrounds.append(self.bg_data[idx])
@@ -115,6 +119,12 @@ class BatchGenerator(object):
             batch_dict['SPS'] = self.patch(torch.FloatTensor(SPS))
             batch_dict['y1'] = self.patch(torch.LongTensor(y1))
             batch_dict['y2'] = self.patch(torch.LongTensor(y2))
+            print(batch_dict['BGD'].shape)
+            print(batch_dict['FGD'].shape)
+            print(batch_dict['SPS'].shape)
+            print(batch_dict['y1'].shape)
+            print(batch_dict['y2'].shape)
+
             yield batch_dict
 
         return
