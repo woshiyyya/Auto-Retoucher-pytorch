@@ -8,7 +8,10 @@ A PyTorch implementation of ART framework.
 ![resource/test_1.png](resource/test_1.png)
 ![resource/test_2.png](resource/test_2.png)
 
-### demo:
+### Output Images:
+
+The backgrounds are selected from gallery, with best content-level consistency.
+
 ![resource/result1.png](resource/demo2.png)
 ![resource/result1.png](resource/result1.png)
 
@@ -17,11 +20,11 @@ Adjustment procedure guided by model's gradient.
 
 Fg moves from a random initial location to a plausible position
 
-![resource/result1_seq.png](resource/result1_seq.png)
-
+![resource/result1_seq.png](resource/moving_sequence1.jpg)
+![resource/result2_seq.png](resource/moving_sequence2.jpg)
 
 ## Framework:
-![](resource/.jpg)
+![](resource/pipeline.jpg)
 
 
 ## Training:
