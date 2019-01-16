@@ -28,14 +28,28 @@ Fg moves from a random initial location to a plausible position
 ![resource/result1_seq.png](resource/moving_sequence1.jpg)
 ![resource/result2_seq.png](resource/moving_sequence2.jpg)
 
+## Requirements
+```
+pytroch=0.4.1  
+tensorboardX  
+tqdm   
+cv2 
+``` 
 ## Training:
 
 ```
-python train.py
+python train.py --train_path=YOUR_DATA_PATH   
+                --test_path=YOUR_TEST_DATA_PATH
+                --submit_dir=./submission
+                --batch_size=20
+                --epochs=10
+                --attention
 ```
 
 ## Inference:
 
 ```
-python Inference.py
+python Inference.py --test_img=YOUR_TEST_IMAGE
+                    --top_k=5
+                    --sample_num=100
 ```
